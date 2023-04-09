@@ -1,18 +1,28 @@
-import sys
+from typing import List
+
+from fastapi import Depends, FastAPI
+from sqlalchemy.orm import Session
+
+import crud
 import models
-from database import engine
-import praw
+import schemas
+from database import SessionLocal, engine
 
 
-# models.Base.metadata.create_all(bind=engine)
-reddit = praw.Reddit(
-    client_id="qf7TJZrXXD-swdIOWC3sOA",
-    client_secret="31u-0cqAENXkAC-uD5gtkkUy2sD5Dg",
-    user_agent="testscript by u/prinzchiyo",
-)
+app = FastAPI()
 
-# print(reddit.user.me())
-for submission in reddit.subreddit(sys.argv[1]).hot(limit=3):
-    print(submission.title)
-    print(submission.selftext)
-    print(submission.url)
+# Dependency
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+@app.get("/posts/", response_model=List[schemas.Post])
+def read_posts(db: Session = Depends(get_db)):
+    posts = crud.get_posts(db)
+    return posts
