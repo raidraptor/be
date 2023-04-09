@@ -17,6 +17,6 @@ reddit = praw.Reddit(
 )
 
 # print(reddit.user.me())
-for submission in reddit.subreddit(sys.argv[1]).hot(limit=3):
+for submission in reddit.subreddit(sys.argv[1]).hot(limit=sys.argv[2]):
     crud.create_post(SessionLocal(), PostCreate(name=submission.title,
                      text=submission.selftext, imgUrl=submission.url))
