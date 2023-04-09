@@ -1,3 +1,4 @@
 fastapi
 uvicorn
+pysqlite3
 sqlalchemy

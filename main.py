@@ -2,6 +2,7 @@ from typing import List
 
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
+from crawl import crawlFunction
 
 import crud
 import models
@@ -26,3 +27,8 @@ def get_db():
 def read_posts(db: Session = Depends(get_db)):
     posts = crud.get_posts(db)
     return posts
+
+
+@app.post("/crawl/")
+def crawl(subreddit: str, number: int):
+    crawlFunction(subreddit=subreddit, number=number)
