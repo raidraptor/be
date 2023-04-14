@@ -1,5 +1,6 @@
 # be
 
+uvicorn main:app --reload) to run dev server
 
 ask to crawl posts:
 curl -X 'POST' \
